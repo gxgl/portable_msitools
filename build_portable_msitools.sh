@@ -43,9 +43,13 @@ fi
 # Creating vars containing git links
 GLIB="https://github.com/GNOME/glib.git"
 LIBGSF="https://github.com/GNOME/libgsf.git"
+
+# We keep MSITOOLS on last position -> see below
 MSITOOLS="https://github.com/GNOME/msitools.git"
 
 # Create array from git link for later use
+## MSITOOLS Should always be the last as it depends on the
+## other tools required by the libmsi and msitools executables
 GITLINKS=($GLIB $LIBGSF $MSITOOLS)
 
 build () {
@@ -74,6 +78,10 @@ build () {
             cd builddir
             meson compile
             meson test
+        fi
+        if [[ ! "$GITDIR" = "msitools" ]]; then
+            DESTDIR=$INSTALLDIR/msitools meson install
+        else
             DESTDIR=$INSTALLDIR/$GITDIR meson install
         fi
     else
@@ -81,7 +89,7 @@ build () {
             echo "We use Autotools"
             cd $GITDIR
             ./autogen.sh
-            ./configure --prefix=$INSTALLDIR/$GITDIR --enable-static --disable-shared
+            ./configure --prefix=$INSTALLDIR/msitools --enable-static --disable-shared
             make
             make install
         fi
