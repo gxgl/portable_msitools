@@ -42,6 +42,7 @@ fi
 
 # Creating vars containing git links
 GLIB="https://github.com/GNOME/glib.git"
+LIBXML="https://github.com/GNOME/libxml2.git"
 LIBGSF="https://github.com/GNOME/libgsf.git"
 
 # We keep MSITOOLS on last position -> see below
@@ -50,7 +51,39 @@ MSITOOLS="https://github.com/GNOME/msitools.git"
 # Create array from git link for later use
 ## MSITOOLS Should always be the last as it depends on the
 ## other tools required by the libmsi and msitools executables
-GITLINKS=($GLIB $LIBGSF $MSITOOLS)
+GITLINKS=($GLIB $LIBXML $LIBGSF $MSITOOLS)
+
+useMeson () {
+    echo "We use Meson"
+    cd $GITDIR
+    meson setup --wipe
+    meson setup builddir --prefix=/ --default-library=static -Db_pie=true
+    cd builddir
+    meson compile
+    meson test
+    if [[ ! "$GITDIR" = "msitools" ]]; then
+        DESTDIR=$INSTALLDIR/msitools meson install
+    else
+        DESTDIR=$INSTALLDIR/$GITDIR meson install
+        echo $DESTDIR
+    fi
+}
+
+useAutotools () {
+    echo "We use Autotools"
+    cd $GITDIR
+    ./autogen.sh
+    INSTALLPATH=$INSTALLDIR/msitools/lib/x86_64-linux-gnu
+    if [ "$GITDIR" = "libxml2" ]; then
+        ./configure --prefix=$INSTALLPATH --libdir=$INSTALLPATH --enable-static --disable-shared
+    else
+        #./configure --prefix=$INSTALLPATH --libdir=$INSTALLPATH --enable-static --disable-shared LDFLAGS=$INSTALLPATH LIBS=$INSTALLPATH
+        #./configure --prefix=$INSTALLPATH --libdir=$INSTALLPATH --enable-static --disable-shared --enable-default-pie
+        ./configure --prefix=$INSTALLPATH --libdir=$INSTALLPATH --enable-static --disable-shared
+    fi
+    make
+    make install
+}
 
 build () {
     cd $SOURCESDIR
@@ -70,28 +103,18 @@ build () {
         sed -i 's/libmsi = shared_library/libmsi = library/' $SOURCESDIR/$GITDIR/libmsi/meson.build
     fi
     if [ "$GITDIR" = "glib" ] || [ "$GITDIR" = "msitools" ]; then
-        if [[ ! -d "$INSTALLDIR/$GITDIR" ]]; then
-            echo "We use Meson"
-            cd $GITDIR
-            meson setup --wipe
-            meson setup builddir --prefix=/ --default-library=static -Db_pie=true
-            cd builddir
-            meson compile
-            meson test
+        if [ "$GITDIR" = "glib" ] && [[ ! -f "$INSTALLDIR/msitools/lib/x86_64-linux-gnu/libglib-2.0.a" ]]; then
+            useMeson
         fi
-        if [[ ! "$GITDIR" = "msitools" ]]; then
-            DESTDIR=$INSTALLDIR/msitools meson install
-        else
-            DESTDIR=$INSTALLDIR/$GITDIR meson install
+        if [ "$GITDIR" = "msitools" ] && [[ ! -f "$INSTALLDIR/msitools/lib/x86_64-linux-gnu/libmsi.a" ]]; then
+            useMeson
         fi
     else
-        if [[ ! -d "$INSTALLDIR/$GITDIR" ]]; then
-            echo "We use Autotools"
-            cd $GITDIR
-            ./autogen.sh
-            ./configure --prefix=$INSTALLDIR/msitools --enable-static --disable-shared
-            make
-            make install
+        if [ "$GITDIR" = "libxml2" ] && [[ ! -f "$INSTALLDIR/msitools/lib/x86_64-linux-gnu/libxml2.a" ]]; then
+            useAutotools
+        fi
+        if [ "$GITDIR" = "libgsf" ] && [[ ! -f "$INSTALLDIR/msitools/lib/x86_64-linux-gnu/lib/libgsf-1.a" ]]; then
+            useAutotools
         fi
     fi
 
