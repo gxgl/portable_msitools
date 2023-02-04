@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#sudo apt-get install build-essential manpages-dev python3 python3-pip python3-setuptools python3-wheel ninja-build valac meson cmake* git libgsf* libgcab* gobject* libperl-dev libgtk* -y
-
 # Downloading prerequsites
 dwPrerequisites () {
     declare -A osInfo;
@@ -77,8 +75,6 @@ useAutotools () {
     if [ "$GITDIR" = "libxml2" ]; then
         ./configure --prefix=$INSTALLPATH --libdir=$INSTALLPATH --enable-static --disable-shared
     else
-        #./configure --prefix=$INSTALLPATH --libdir=$INSTALLPATH --enable-static --disable-shared LDFLAGS=$INSTALLPATH LIBS=$INSTALLPATH
-        #./configure --prefix=$INSTALLPATH --libdir=$INSTALLPATH --enable-static --disable-shared --enable-default-pie
         ./configure --prefix=$INSTALLPATH --libdir=$INSTALLPATH --enable-static --disable-shared
     fi
     make
@@ -113,7 +109,7 @@ build () {
         if [ "$GITDIR" = "libxml2" ] && [[ ! -f "$INSTALLDIR/msitools/lib/x86_64-linux-gnu/libxml2.a" ]]; then
             useAutotools
         fi
-        if [ "$GITDIR" = "libgsf" ] && [[ ! -f "$INSTALLDIR/msitools/lib/x86_64-linux-gnu/lib/libgsf-1.a" ]]; then
+        if [ "$GITDIR" = "libgsf" ] && [[ ! -f "$INSTALLDIR/msitools/lib/x86_64-linux-gnu/libgsf-1.a" ]]; then
             useAutotools
         fi
     fi
