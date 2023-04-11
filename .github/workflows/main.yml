@@ -1,0 +1,22 @@
+name: Check and Build
+
+on:
+  schedule:
+    - cron: '* * * * *'
+
+jobs:
+  check_and_build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the remote repository
+      uses: actions/checkout@v2
+      with:
+        repository: GNOME/msitools
+        path: remote-repo
+
+    - name: Get latest version
+      id: latest_version
+      run: |
+        cd remote-repo
+        echo "::set-output name=version::$(git describe --tags --abbrev=0)"
