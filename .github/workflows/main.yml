@@ -19,6 +19,7 @@ jobs:
     - name: Get latest version
       id: latest_version
       run: |
+        echo "CURRENT GITHUB_ENV: $GITHUB_ENV"
         cd remote-repo
         git fetch --tags
         LATEST_VERSION=$(git tag | sort -V -r | head -n 1) || echo "Failed to get the latest version"
