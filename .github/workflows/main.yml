@@ -20,4 +20,5 @@ jobs:
       id: latest_version
       run: |
         cd remote-repo
-        echo "::set-output name=version::$(git describe --tags --abbrev=0)"
+        LATEST_VERSION=$(git describe --tags --abbrev=0)
+        echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
