@@ -3,6 +3,7 @@ name: Check and Build
 on:
   schedule:
     - cron: '* * * * *'
+  workflow_dispatch:
 
 jobs:
   check_and_build:
