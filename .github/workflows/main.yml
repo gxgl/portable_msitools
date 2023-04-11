@@ -29,3 +29,19 @@ jobs:
           echo "Could not determine the latest version"
           exit 1
         fi
+
+    - name: Set last version
+      run: |
+        LAST_VERSION="v0.100"
+        echo "LAST_VERSION=$LAST_VERSION" >> $GITHUB_ENV
+
+    - name: Compare versions and run script if needed
+      run: |
+        if [[ "${{ env.LATEST_VERSION }}" > "${{ env.LAST_VERSION }}" ]]; then
+          echo "Updating from ${{ env.LAST_VERSION }} to ${{ env.LATEST_VERSION }}"
+          # Run your script here
+          #./my_script.sh
+          # Add your release steps here
+        else
+          echo "Latest version (${{ env.LATEST_VERSION }}) is not greater than the last version (${{ env.LAST_VERSION }})"
+        fi
