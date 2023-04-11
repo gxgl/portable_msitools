@@ -21,7 +21,7 @@ jobs:
       run: |
         cd remote-repo
         git fetch --tags
-        LATEST_VERSION=$(git describe --tags --abbrev=0) || echo "Failed to get the latest version"
+        LATEST_VERSION=$(git describe --tags --abbrev=0 --always) || echo "Failed to get the latest version"
         if [ -n "$LATEST_VERSION" ]; then
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
         else
