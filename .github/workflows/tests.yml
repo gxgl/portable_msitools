@@ -10,12 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out the remote repository
-      uses: actions/checkout@v3
-      with:
-        repository: GNOME/msitools
-        path: remote-repo
-
     - name: Running test...
       id: running_test
       run: |
