@@ -57,17 +57,7 @@ jobs:
           python3 --version
           appimage-builder --version
 
-          # Clonning msitools repo...
-          git clone --recursive https://github.com/GNOME/msitools.git
-          # Building msitools...
-          cd msitools
-          meson setup builddir
-          cd builddir
-          meson compile
-          meson test
-          DESTDIR=../../AppDir meson install
-          cd ../..
-          appimage-builder --generate
+          cat /etc/apt/sources.list
 
           # Run your script here
           #./build_portable_msitools.sh
