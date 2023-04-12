@@ -24,3 +24,4 @@ jobs:
         echo "Listing Sources..."
         ls -lah /etc/apt/sources.list.d
         cat /etc/apt/sources.list.d/microsoft-prod.list
+        cat /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-jammy.list
