@@ -53,9 +53,12 @@ jobs:
           sudo chmod +x /usr/local/bin/appimagetool
           # sudo chmod +x my_script.sh
           sudo chmod +x build_portable_msitools.sh
-          # appimage-builder --help
+          python --version
+          python3 --version
+          appimage-builder --version
           # Run your script here
-          ./build_portable_msitools.sh
+          #./build_portable_msitools.sh
+          ls -lah
           # Add your release steps here
         else
           echo "Latest version (${{ env.LATEST_VERSION }}) is not greater than the last version (${{ env.LAST_VERSION }})"
