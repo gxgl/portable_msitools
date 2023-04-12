@@ -84,7 +84,8 @@ if [ -d "$folder" ]; then
                 echo "    - amd64" >>$recipe
                 echo "    allow_unauthenticated: true" >>$recipe
                 echo "    sources:" >>$recipe
-                echo "    - sourceline: deb http://azure.archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse" >>$recipe
+                echo "    - sourceline: deb [signed-by=/etc/apt/trusted.gpg.d/microsoft.gpg] http://azure.archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse" >>$recipe
+                echo "    - sourceline: deb [signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] http://azure.archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse" >>$recipe
                 echo "    - sourceline: deb http://azure.archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe multiverse" >>$recipe
                 echo "    - sourceline: deb http://azure.archive.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse" >>$recipe
 
