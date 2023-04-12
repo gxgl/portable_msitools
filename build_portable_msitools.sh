@@ -84,11 +84,9 @@ if [ -d "$folder" ]; then
                 echo "    - amd64" >>$recipe
                 echo "    allow_unauthenticated: true" >>$recipe
                 echo "    sources:" >>$recipe
-                #echo "    - sourceline: deb https://mirrors.hostico.ro/linuxmint/packages vera main upstream import backport" >>$recipe
-                echo "    - sourceline: deb http://mirrors.pidginhost.com/ubuntu jammy main restricted universe multiverse" >>$recipe
-                #echo "    - sourceline: deb http://mirrors.pidginhost.com/ubuntu jammy-updates main restricted universe multiverse" >>$recipe
-                #echo "    - sourceline: deb http://mirrors.pidginhost.com/ubuntu jammy-backports main restricted universe multiverse" >>$recipe
-                #echo "    - sourceline: deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse" >>$recipe
+                echo "    - sourceline: deb http://azure.archive.ubuntu.com/ubuntu/ jammy main restricted universe multiverse" >>$recipe
+                echo "    - sourceline: deb http://azure.archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe multiverse" >>$recipe
+                echo "    - sourceline: deb http://azure.archive.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse" >>$recipe
 
                 if [ "$filename" == "msidiff" ] || [ "$filename" == "msidump" ]; then
                     echo "    include:" >>$recipe

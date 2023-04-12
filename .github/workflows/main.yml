@@ -57,20 +57,20 @@ jobs:
           python3 --version
           appimage-builder --version
 
-          cat /etc/apt/sources.list
+          #cat /etc/apt/sources.list
 
           # Run your script here
-          #./build_portable_msitools.sh
+          ./build_portable_msitools.sh
           ls -lah
           # Add your release steps here
         else
           echo "Latest version (${{ env.LATEST_VERSION }}) is not greater than the last version (${{ env.LAST_VERSION }})"
         fi
 
-    - name: Commit and push changes
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add AppImageBuilder.yml
-        git commit -m "Add AppImageBuilder.yml file"
-        git push
+    # - name: Commit and push changes
+    #   run: |
+    #     git config --local user.email "action@github.com"
+    #     git config --local user.name "GitHub Action"
+    #     git add AppImageBuilder.yml
+    #     git commit -m "Add AppImageBuilder.yml file"
+    #     git push
