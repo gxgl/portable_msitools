@@ -203,5 +203,5 @@ for file in *-latest*.AppImage; do
     mv "$file" "dist/msitools/${file%-latest*}"
 done
 cd dist/ 
-tar -czvf msitools.tar.gz msitools/* 
+tar -czvf msitools-$LATEST_VERSION-portable.tar.gz msitools/* 
 cd ..
