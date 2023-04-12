@@ -21,6 +21,7 @@ jobs:
       run: |
         echo "Listing GPGs..."
         ls -lah /etc/apt/trusted.gpg.d
+        ls -lah /usr/share/keyrings
         echo "Listing Sources..."
         ls -lah /etc/apt/sources.list.d
         cat /etc/apt/sources.list.d/microsoft-prod.list
