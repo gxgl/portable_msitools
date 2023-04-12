@@ -59,6 +59,10 @@ jobs:
 
           #cat /etc/apt/sources.list
 
+          # Try to fix apt NO_PUBKEY
+          gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 871920D1991BC93C
+          gpg --export --armor 871920D1991BC93C | sudo apt-key add -
+
           # Run your script here
           ./build_portable_msitools.sh
           ls -lah
