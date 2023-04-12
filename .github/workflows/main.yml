@@ -56,6 +56,19 @@ jobs:
           python --version
           python3 --version
           appimage-builder --version
+
+          # Clonning msitools repo...
+          git clone --recursive https://github.com/GNOME/msitools.git
+          # Building msitools...
+          cd msitools
+          meson setup builddir
+          cd builddir
+          meson compile
+          meson test
+          DESTDIR=../../AppDir meson install
+          cd ../..
+          appimage-builder --generate
+
           # Run your script here
           #./build_portable_msitools.sh
           ls -lah
@@ -63,3 +76,11 @@ jobs:
         else
           echo "Latest version (${{ env.LATEST_VERSION }}) is not greater than the last version (${{ env.LAST_VERSION }})"
         fi
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add AppImageBuilder.yml
+        git commit -m "Add AppImageBuilder.yml file"
+        git push
