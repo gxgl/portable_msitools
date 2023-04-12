@@ -19,6 +19,7 @@ jobs:
     - name: Running test...
       id: running_test
       run: |
+        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 871920D1991BC93C
         echo "Listing GPGs..."
         ls -lah /etc/apt/trusted.gpg.d
         ls -lah /usr/share/keyrings
