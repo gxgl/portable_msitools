@@ -166,7 +166,7 @@ do
             # File exists, run the code
             echo ""
             echo "appimage-builder --recipe $recipe"
-            sudo appimage-builder --recipe $recipe
+            appimage-builder --recipe $recipe
             echo ""
         else
             echo "No $filename"
@@ -189,7 +189,7 @@ do
             echo "Rebuilding $filename"
             echo ""
             echo "appimage-builder --recipe $recipe"
-            sudo appimage-builder --recipe $recipe
+            appimage-builder --recipe $recipe
             echo ""
         fi
     fi
