@@ -20,4 +20,17 @@ jobs:
         echo "Listing Sources..."
         ls -lah /etc/apt/sources.list.d
         cat /etc/apt/sources.list.d/microsoft-prod.list
-        cat /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-jammy.list
+        cat /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-jammy.list    
+
+    - name: Set last version
+      run: |
+        LAST_VERSION="v0.100"
+        echo "LAST_VERSION=$LAST_VERSION" >> $GITHUB_ENV    
+
+    # - name: Commit and push changes
+    #   run: |
+    #     git config --local user.email "action@github.com"
+    #     git config --local user.name "GitHub Action"
+    #     git add dist/msitools-$LATEST_VERSION-portable.tar.gz
+    #     git commit -m "Add AppImageBuilder.yml file"
+    #     git push

@@ -30,11 +30,6 @@ jobs:
           echo "Could not determine the latest version"
           exit 1
         fi
-
-    - name: Set last version
-      run: |
-        LAST_VERSION="v0.100"
-        echo "LAST_VERSION=$LAST_VERSION" >> $GITHUB_ENV
     
     - name: Check out repository
       uses: actions/checkout@v3
@@ -45,41 +40,38 @@ jobs:
         sudo apt-get install -y build-essential manpages-dev python3 python3-pip python3-setuptools python3-wheel ninja-build valac meson cmake* git libgsf* libgcab* gobject* libperl-dev libgtk* binutils coreutils desktop-file-utils fakeroot fuse libgdk-pixbuf2.0-dev patchelf squashfs-tools strace util-linux zsync
         # Install appimagetool AppImage (only for appimage-buidler < v1.0.3)
         sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
-        #sudo pip3 install appimage-builder  
         sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git
 
     - name: Compare versions and run script if needed
       run: |
         if [[ "${{ env.LATEST_VERSION }}" > "${{ env.LAST_VERSION }}" ]]; then
           echo "Updating from ${{ env.LAST_VERSION }} to ${{ env.LATEST_VERSION }}"
-          echo $(pwd)
-          ls -lah
           sudo chmod +x /usr/local/bin/appimagetool
-          # sudo chmod +x my_script.sh
           sudo chmod +x build_portable_msitools.sh
-          python --version
-          python3 --version
-          appimage-builder --version
-
-          #cat /etc/apt/sources.list
-
-          # Try to fix apt NO_PUBKEY
-          #sudo gpg --keyserver pgpkeys.mit.edu --recv-key  871920D1991BC93C
-          #sudo gpg -a --export 871920D1991BC93C | sudo apt-key add -
-          #sudo apt-get update
-
           # Run your script here
           ./build_portable_msitools.sh
-          ls -lah
-          # Add your release steps here
+          echo "LAST_VERSION=$LASTEST_VERSION" >> $GITHUB_ENV
         else
           echo "Latest version (${{ env.LATEST_VERSION }}) is not greater than the last version (${{ env.LAST_VERSION }})"
         fi
 
-    # - name: Commit and push changes
-    #   run: |
-    #     git config --local user.email "action@github.com"
-    #     git config --local user.name "GitHub Action"
-    #     git add AppImageBuilder.yml
-    #     git commit -m "Add AppImageBuilder.yml file"
-    #     git push
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+      with:
+        tag_name: ${{ env.LATEST_VERSION }}
+        release_name: Release ${{ env.LATEST_VERSION }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dist/msitools-$LATEST_VERSION-portable.tar.gz
+        asset_name: msitools-$LATEST_VERSION-portable.tar.gz
+        asset_content_type: application/gzip
