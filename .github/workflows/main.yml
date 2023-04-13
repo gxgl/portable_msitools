@@ -64,9 +64,9 @@ jobs:
           #cat /etc/apt/sources.list
 
           # Try to fix apt NO_PUBKEY
-          sudo gpg --keyserver pgpkeys.mit.edu --recv-key  871920D1991BC93C
-          sudo gpg -a --export 871920D1991BC93C | sudo apt-key add -
-          sudo apt-get update
+          #sudo gpg --keyserver pgpkeys.mit.edu --recv-key  871920D1991BC93C
+          #sudo gpg -a --export 871920D1991BC93C | sudo apt-key add -
+          #sudo apt-get update
 
           # Run your script here
           ./build_portable_msitools.sh
