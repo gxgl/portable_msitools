@@ -58,8 +58,9 @@ jobs:
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
         tag_name: ${{ env.LATEST_VERSION }}
         release_name: Release ${{ env.LATEST_VERSION }}
         draft: true
@@ -67,8 +68,9 @@ jobs:
 
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./dist/msitools-$LATEST_VERSION-portable.tar.gz
         asset_name: msitools-$LATEST_VERSION-portable.tar.gz
