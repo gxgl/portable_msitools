@@ -15,6 +15,13 @@ jobs:
       with:
         repository: AppImageCrafters/appimage-builder
         path: remote-repo
+    
+    - name: Check out our repository
+      uses: actions/checkout@v3
+
+    - name: Read current appimage-builder version
+      run: |
+        echo "AIB_CURRENT_VERSION=$(cat .github/aibver)" >> $GITHUB_ENV
 
     - name: Get latest appimage-builder version
       id: appimgbld_latest_version
