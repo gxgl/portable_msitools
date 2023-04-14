@@ -10,27 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Running test...
-      id: running_test
-      run: |
-        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 871920D1991BC93C
-        echo "Listing GPGs..."
-        ls -lah /etc/apt/trusted.gpg.d
-        ls -lah /usr/share/keyrings
-        echo "Listing Sources..."
-        ls -lah /etc/apt/sources.list.d
-        cat /etc/apt/sources.list.d/microsoft-prod.list
-        cat /etc/apt/sources.list.d/ubuntu-toolchain-r-ubuntu-test-jammy.list    
+    - name: Check out the appimage-builder repository
+      uses: actions/checkout@v3
+      with:
+        repository: AppImageCrafters/appimage-builder
+        path: remote-repo
 
-    - name: Set last version
+    - name: Get latest appimage-builder version
+      id: appimgbld_latest_version
       run: |
-        LAST_VERSION="v0.100"
-        echo "LAST_VERSION=$LAST_VERSION" >> $GITHUB_ENV    
-
-    # - name: Commit and push changes
-    #   run: |
-    #     git config --local user.email "action@github.com"
-    #     git config --local user.name "GitHub Action"
-    #     git add dist/msitools-$LATEST_VERSION-portable.tar.gz
-    #     git commit -m "Add AppImageBuilder.yml file"
-    #     git push
+        cd remote-repo
+        git fetch --tags
+        AIB_LATEST_VERSION=$(git tag | sort -V -r | head -n 1) || echo "Failed to get the latest version"
+        echo "Latest version: $AIB_LATEST_VERSION"
+        if [ -n "$AIB_LATEST_VERSION" ]; then
+          echo "AIB_LATEST_VERSION=$AIB_LATEST_VERSION" >> $GITHUB_ENV
+        else
+          echo "Could not determine the appimage-builder latest version"
+          exit 1
+        fi
