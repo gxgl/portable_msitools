@@ -11,7 +11,7 @@ The "build_portable_msitools" script and the build action in this repo is using:
 - [AppImageCrafters/appimage-builder](https://github.com/AppImageCrafters/appimage-builder)
 - The msitools.png icon is used from [msi.png](https://www.softicons.com/system-icons/imageboard-filetype-icons-by-lopagof/file-msi-icon)
 
-All the rights on used software and icon goes to their owners.
+All the rights on used software and icon goes to their respective owners.
 
 ## Tested on:
 - [x] Linux Mint (Vera)
@@ -21,7 +21,8 @@ The background color is `#ffffff` for light mode and `#0969DA` for dark mode.
 
 :white_large_square:
 
-:white_check_mark:
+:ballot_box_with_check:
 
-:x:
+:negative_squared_cross_mark:
 
+# Made with love from :romania:
