@@ -19,6 +19,10 @@ All the rights on used software and icon goes to their respective owners.
 - :ballot_box_with_check: Arch and Manjaro Linux
 - :ballot_box_with_check: Ubuntu Linux
 - :white_large_square: Alpine Linux
-- :negative_squared_cross_mark: Mac OS X
+- :negative_squared_cross_mark: Mac OS X (WIP)
+
+> Please let me know if you tested this successfully on other OS to add them in the list
+
+> Also there is WIP for multi linux os version of build_portable_msitools.sh
 
 ## Made with :heart: from :romania:
