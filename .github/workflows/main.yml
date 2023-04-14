@@ -16,35 +16,76 @@ jobs:
         repository: GNOME/msitools
         path: remote-repo
 
-    - name: Get latest version
+    - name: Get msitools latest version
       id: latest_version
       run: |
         cd remote-repo
         git fetch --tags
-        LATEST_VERSION=$(git tag | sort -V -r | head -n 1) || echo "Failed to get the latest version"
-        echo "Latest version: $LATEST_VERSION"
+        LATEST_VERSION=$(git tag | sort -V -r | head -n 1) || echo "Failed to get the latest msitools version"
+        echo "Latest msitools version: $LATEST_VERSION"
         if [ -n "$LATEST_VERSION" ]; then
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
         else
-          echo "Could not determine the latest version"
+          echo "Could not determine the msitools latest version"
+          exit 1
+        fi
+
+    - name: Check out the appimage-builder repository
+      uses: actions/checkout@v3
+      with:
+        repository: AppImageCrafters/appimage-builder
+        path: remote-aibrepo
+
+    - name: Get appimage-builder latest version
+      id: appimgbld_latest_version
+      run: |
+        cd remote-aibrepo
+        git fetch --tags
+        AIB_LATEST_VERSION=$(git tag | sort -V -r | head -n 1) || echo "Failed to get the appimage-builder latest version"
+        echo "Latest appimage-builder version: $AIB_LATEST_VERSION"
+        if [ -n "$AIB_LATEST_VERSION" ]; then
+          echo "AIB_LATEST_VERSION=$AIB_LATEST_VERSION" >> $GITHUB_ENV
+        else
+          echo "Could not determine the appimage-builder latest version"
           exit 1
         fi
     
     - name: Check out our repository
       uses: actions/checkout@v3
 
-    - name: Read current version
+    - name: Read current msitools version
       run: |
         echo "CURRENT_VERSION=$(cat .github/version)" >> $GITHUB_ENV
+
+    - name: Read current appimage-builder version
+      run: |
+        echo "AIB_CURRENT_VERSION=$(cat .github/aibver)" >> $GITHUB_ENV
 
     - name: Installing dependencies
       run: |
         if [ "${{ env.LATEST_VERSION }}" != "${{ env.CURRENT_VERSION }}" ]; then
           # Installing dependencies...
           sudo apt-get install -y build-essential manpages-dev python3 python3-pip python3-setuptools python3-wheel ninja-build valac meson cmake* git libgsf* libgcab* gobject* libperl-dev libgtk* binutils coreutils desktop-file-utils fakeroot fuse libgdk-pixbuf2.0-dev patchelf squashfs-tools strace util-linux zsync
-          # Install appimagetool AppImage (only for appimage-buidler < v1.0.3)
-          sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
-          sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git
+          # Install appimagetool AppImage
+          if [ "${{ env.AIB_LATEST_VERSION }}" != "${{ env.AIB_CURRENT_VERSION }}" ]; then
+            echo "Running on the latest version of appimage-builder ${{ env.AIB_LATEST_VERSION }}"
+            wget -O appimage-builder-x86_64.AppImage https://github.com/AppImageCrafters/appimage-builder/releases/download/${{ env.AIB_LATEST_VERSION }}/appimage-builder-1.1.0-x86_64.AppImage
+            chmod +x appimage-builder-x86_64.AppImage
+            sudo mv appimage-builder-x86_64.AppImage /usr/local/bin/appimage-builder
+            sudo pip3 install appimage-builder
+            echo "${{ env.AIB_LATEST_VERSION }}" > .github/aibver          
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git add .github/aibver
+            git commit -m "Update version to ${{ env.AIB_LATEST_VERSION }}"
+            git push
+          fi
+          if [ "${{ env.AIB_LATEST_VERSION }}" == "v1.1.0" ]; then
+            echo "Version 1.1.0 is breaking up our builds because ubuntu should be +ubuntu, so..."
+            echo "Running on the development (Continuous) version of appimage-builder"
+            sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
+            sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git
+          fi
         fi
 
     - name: Compare versions and run script if needed
