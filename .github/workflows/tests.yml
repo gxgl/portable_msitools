@@ -14,19 +14,12 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: AppImageCrafters/appimage-builder
-        path: remote-repo
-    
-    - name: Check out our repository
-      uses: actions/checkout@v3
-
-    - name: Read current appimage-builder version
-      run: |
-        echo "AIB_CURRENT_VERSION=$(cat .github/aibver)" >> $GITHUB_ENV
+        path: remote-aibrepo
 
     - name: Get latest appimage-builder version
       id: appimgbld_latest_version
       run: |
-        cd remote-repo
+        cd remote-aibrepo
         git fetch --tags
         AIB_LATEST_VERSION=$(git tag | sort -V -r | head -n 1) || echo "Failed to get the latest version"
         echo "Latest version: $AIB_LATEST_VERSION"
@@ -36,6 +29,13 @@ jobs:
           echo "Could not determine the appimage-builder latest version"
           exit 1
         fi
+    
+    - name: Check out our repository
+      uses: actions/checkout@v3
+
+    - name: Read current appimage-builder version
+      run: |
+        echo "AIB_CURRENT_VERSION=$(cat .github/aibver)" >> $GITHUB_ENV
 
     - name: Compare appimage-builder versions and run script if needed
       run: |
