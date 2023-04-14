@@ -19,7 +19,6 @@ jobs:
     - name: Get latest version
       id: latest_version
       run: |
-        echo "CURRENT GITHUB_ENV: $GITHUB_ENV"
         cd remote-repo
         git fetch --tags
         LATEST_VERSION=$(git tag | sort -V -r | head -n 1) || echo "Failed to get the latest version"
@@ -30,29 +29,42 @@ jobs:
           echo "Could not determine the latest version"
           exit 1
         fi
+
+    - name: Read current version
+      run: |
+        echo "CURRENT_VERSION=$(cat .github/version)" >> $GITHUB_ENV
     
     - name: Check out our repository
       uses: actions/checkout@v3
 
     - name: Installing dependencies
       run: |
-        # Installing dependencies...
-        sudo apt-get install -y build-essential manpages-dev python3 python3-pip python3-setuptools python3-wheel ninja-build valac meson cmake* git libgsf* libgcab* gobject* libperl-dev libgtk* binutils coreutils desktop-file-utils fakeroot fuse libgdk-pixbuf2.0-dev patchelf squashfs-tools strace util-linux zsync
-        # Install appimagetool AppImage (only for appimage-buidler < v1.0.3)
-        sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
-        sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git
+        if [ "${{ env.LATEST_VERSION }}" != "${{ env.CURRENT_VERSION }}" ]; then
+          # Installing dependencies...
+          sudo apt-get install -y build-essential manpages-dev python3 python3-pip python3-setuptools python3-wheel ninja-build valac meson cmake* git libgsf* libgcab* gobject* libperl-dev libgtk* binutils coreutils desktop-file-utils fakeroot fuse libgdk-pixbuf2.0-dev patchelf squashfs-tools strace util-linux zsync
+          # Install appimagetool AppImage (only for appimage-buidler < v1.0.3)
+          sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
+          sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git
+        fi
 
     - name: Compare versions and run script if needed
       run: |
-        if [[ "${{ env.LATEST_VERSION }}" > "${{ env.LAST_VERSION }}" ]]; then
-          echo "Updating from ${{ env.LAST_VERSION }} to ${{ env.LATEST_VERSION }}"
+        if [ "${{ env.LATEST_VERSION }}" != "${{ env.CURRENT_VERSION }}" ]; then
+          echo "Updating from ${{ env.LAST_VERSION }} to ${{ env.CURRENT_VERSION }}"
           sudo chmod +x /usr/local/bin/appimagetool
           sudo chmod +x build_portable_msitools.sh
           # Run your script here
           ./build_portable_msitools.sh
-          echo "LAST_VERSION=$LASTEST_VERSION" >> $GITHUB_ENV
+          echo "Updating version with the latest version"
+          echo "${{ env.LATEST_VERSION }}" > .github/version          
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .github/version
+          git commit -m "Update version to ${{ env.LATEST_VERSION }}"
+          git push
         else
           echo "Latest version (${{ env.LATEST_VERSION }}) is not greater than the last version (${{ env.LAST_VERSION }})"
+          echo "Version is up to date"
         fi
 
     - name: Create Release
@@ -75,13 +87,3 @@ jobs:
         asset_path: ./dist/msitools-${{ env.LATEST_VERSION }}-portable.tar.gz
         asset_name: msitools-${{ env.LATEST_VERSION }}-portable.tar.gz
         asset_content_type: application/gzip
-
-    - name: List directories
-      run: |
-        echo "List directories"
-        ls -lah /
-        echo ""
-        ls -lah /data/msitools/
-        echo ""
-        ls -lah /data/
-        echo ""
