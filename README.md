@@ -10,4 +10,6 @@ The build action in this repo is using:
 - [GNOME/msitools (readonly repo)](https://github.com/GNOME/msitools)
 - [AppImageCrafters/appimage-builder](https://github.com/AppImageCrafters/appimage-builder)
 
+The msitools.png icon is used from [msi.png](https://www.softicons.com/system-icons/imageboard-filetype-icons-by-lopagof/file-msi-icon)
 
+All the rights on used software and icon goes to their owners.
