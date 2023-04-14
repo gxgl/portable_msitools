@@ -13,8 +13,15 @@ The "build_portable_msitools" script and the build action in this repo is using:
 
 All the rights on used software and icon goes to their owners.
 
-## Successfully tested on:
+## Tested on:
 - [x] Linux Mint (Vera)
 - [x] Amazon Linux 2
 
 The background color is `#ffffff` for light mode and `#0969DA` for dark mode.
+
+:white_large_square:
+
+:white_check_mark:
+
+:x:
+
