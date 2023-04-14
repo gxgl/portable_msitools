@@ -17,12 +17,12 @@ All the rights on used software and icon goes to their respective owners.
 - :ballot_box_with_check: Linux Mint
 - :ballot_box_with_check: Amazon Linux 2
 - :ballot_box_with_check: Arch and Manjaro Linux
-- :ballot_box_with_check: Ubuntu Linux
+- :ballot_box_with_check: Ubuntu Linux (require Fuse - on Ubuntu Server)
 - :white_large_square: CentOS Linux
 - :white_large_square: Alma Linux
 - :negative_squared_cross_mark: Alpine Linux
 - :white_large_square: Fedora Linux
-- :negative_squared_cross_mark: Mac OS X (WIP)
+- :negative_squared_cross_mark: Mac OS X
 
 > Please let me know if you tested this successfully on other OS to add them in the list
 
