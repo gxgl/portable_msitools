@@ -51,9 +51,9 @@ jobs:
           git add .github/aibver
           git commit -m "Update version to ${{ env.AIB_LATEST_VERSION }}"
           git push
-        else
-          echo "Latest appimage-builder version (${{ env.AIB_LATEST_VERSION }}) is not greater than the last version (${{ env.LAST_VERSION }})"
-          echo "Version is up to date"
+        fi
+        if [ "${{ env.AIB_LATEST_VERSION }}" == "v1.1.0" ]; then
+          echo "Version 1.1.0 is breaking up our builds because ubuntu should be +ubuntu, so..."
           echo "Running on the development (Continuous) version of appimage-builder"
           sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
           sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git
