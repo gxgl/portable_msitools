@@ -14,11 +14,11 @@ The "build_portable_msitools" script and the build action in this repo is using:
 All the rights on used software and icon goes to their respective owners.
 
 ## Tested on:
-- :ballot_box_with_check: Linux Mint
-- :ballot_box_with_check: Amazon Linux 2
-- :ballot_box_with_check: Arch and Manjaro Linux
-- :ballot_box_with_check: Ubuntu Linux
-- :white_large_square: Alpine Linux
-- :negative_squared_cross_mark: Mac OS X
+:ballot_box_with_check: Linux Mint
+:ballot_box_with_check: Amazon Linux 2
+:ballot_box_with_check: Arch and Manjaro Linux
+:ballot_box_with_check: Ubuntu Linux
+:white_large_square: Alpine Linux
+:negative_squared_cross_mark: Mac OS X
 
 ## Made with :heart: from :romania:
