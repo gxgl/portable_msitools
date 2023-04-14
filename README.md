@@ -4,7 +4,7 @@ Building a portable msitools for linux to avoid conflicts, problems and requirem
 ![My Workflow](https://github.com/gxgl/portable_msitools/actions/workflows/main.yml/badge.svg)
 
 ## About
-This repo and the result of its code came out for my need to have the msitools availabe on the closed systems were I can't install packages due to lack of root access.
+This repo and the result of its code came out for my need to have the msitools availabe on the closed systems where I can't install packages due to lack of root access.
 
 The "build_portable_msitools" script and the build action in this repo is using:
 - [GNOME/msitools (readonly repo)](https://github.com/GNOME/msitools)
@@ -25,4 +25,4 @@ All the rights on used software and icon goes to their respective owners.
 
 > Also there is WIP for multi linux os version of build_portable_msitools.sh
 
-## Made with :heart: from :romania:
+### Made with :heart: from :romania:
