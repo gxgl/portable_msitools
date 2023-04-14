@@ -16,3 +16,5 @@ All the rights on used software and icon goes to their owners.
 ## Successfully tested on:
 - [x] Linux Mint (Vera)
 - [x] Amazon Linux 2
+
+The background color is `#ffffff` for light mode and `#0969DA` for dark mode.
