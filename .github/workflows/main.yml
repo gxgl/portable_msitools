@@ -72,6 +72,16 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/msitools-$LATEST_VERSION-portable.tar.gz
-        asset_name: msitools-$LATEST_VERSION-portable.tar.gz
+        asset_path: ./dist/msitools-${{ env.LATEST_VERSION }}-portable.tar.gz
+        asset_name: msitools-${{ env.LATEST_VERSION }}-portable.tar.gz
         asset_content_type: application/gzip
+
+    - name: List directories
+      run: |
+        echo "List directories"
+        ls -lah /
+        echo ""
+        ls -lah /data/msitools/
+        echo ""
+        ls -lah /data/
+        echo ""
