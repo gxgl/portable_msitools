@@ -29,3 +29,25 @@ jobs:
           echo "Could not determine the appimage-builder latest version"
           exit 1
         fi
+
+    - name: Compare appimage-builder versions and run script if needed
+      run: |
+        if [ "${{ env.AIB_LATEST_VERSION }}" != "${{ env.AIB_CURRENT_VERSION }}" ]; then
+          echo "Running on the latest version of appimage-builder ${{ env.AIB_LATEST_VERSION }}"
+          wget -O appimage-builder-x86_64.AppImage https://github.com/AppImageCrafters/appimage-builder/releases/download/${{ env.AIB_LATEST_VERSION }}/appimage-builder-1.1.0-x86_64.AppImage
+          chmod +x appimage-builder-x86_64.AppImage
+          sudo mv appimage-builder-x86_64.AppImage /usr/local/bin/appimage-builder
+          sudo pip3 install appimage-builder
+          echo "${{ env.AIB_LATEST_VERSION }}" > .github/aibver          
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .github/aibver
+          git commit -m "Update version to ${{ env.AIB_LATEST_VERSION }}"
+          git push
+        else
+          echo "Latest appimage-builder version (${{ env.AIB_LATEST_VERSION }}) is not greater than the last version (${{ env.LAST_VERSION }})"
+          echo "Version is up to date"
+          echo "Running on the development (Continuous) version of appimage-builder"
+          sudo wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O /usr/local/bin/appimagetool
+          sudo pip3 install git+https://github.com/AppImageCrafters/appimage-builder.git
+        fi
